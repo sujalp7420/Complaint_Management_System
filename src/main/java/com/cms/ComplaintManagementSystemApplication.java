@@ -7,7 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ComplaintManagementSystemApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ComplaintManagementSystemApplication.class, args);
+        SpringApplication.run(ComplaintManagementSystemApplication.class, args);
+        System.out.println("System started");
 	}
 
 }
