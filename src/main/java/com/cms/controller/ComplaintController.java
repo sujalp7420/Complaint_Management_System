@@ -1,11 +1,12 @@
 package com.cms.controller;
 
-import com.cms.entity.Complaints;
+import com.cms.dto.ComplaintDTO;
 import com.cms.entity.Status;
+import com.cms.service.ComplaintService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.cms.service.ComplaintService;
-
 import java.util.List;
 
 @RestController
@@ -19,35 +20,56 @@ public class ComplaintController {
     }
 
     @PostMapping
-    public ResponseEntity<Complaints> createComplaint(@RequestBody Complaints complaint) {
-        return ResponseEntity.ok(complaintService.createComplaint(complaint));
+    public ResponseEntity<ComplaintDTO> createComplaint(@Valid @RequestBody ComplaintDTO complaintDTO) {
+        ComplaintDTO createdComplaint = complaintService.createComplaint(complaintDTO);
+        return new ResponseEntity<>(createdComplaint, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Complaints> getComplaint(@PathVariable Integer id) {
-        return ResponseEntity.ok(complaintService.getComplaintById(id));
+    public ResponseEntity<ComplaintDTO> getComplaint(@PathVariable Integer id) {
+        ComplaintDTO complaint = complaintService.getComplaintById(id);
+        return ResponseEntity.ok(complaint);
     }
 
     @GetMapping
-    public ResponseEntity<List<Complaints>> getAllComplaints() {
-        return ResponseEntity.ok(complaintService.getAllComplaints());
+    public ResponseEntity<List<ComplaintDTO>> getAllComplaints() {
+        List<ComplaintDTO> complaints = complaintService.getAllComplaints();
+        return ResponseEntity.ok(complaints);
     }
 
     @GetMapping("/status/{status}")
-    public ResponseEntity<List<Complaints>> getByStatus(@PathVariable Status status) {
-        return ResponseEntity.ok(complaintService.getComplaintsByStatus(status));
+    public ResponseEntity<List<ComplaintDTO>> getByStatus(@PathVariable Status status) {
+        List<ComplaintDTO> complaints = complaintService.getComplaintsByStatus(status);
+        return ResponseEntity.ok(complaints);
     }
 
-    @PutMapping("/{id}/status")
-    public ResponseEntity<Complaints> updateStatus(@PathVariable Integer id,
-                                                   @RequestParam Status status) {
-        return ResponseEntity.ok(complaintService.updateComplaintStatus(id, status));
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<ComplaintDTO>> getByUser(@PathVariable Integer userId) {
+        List<ComplaintDTO> complaints = complaintService.getComplaintsByUser(userId);
+        return ResponseEntity.ok(complaints);
+    }
+
+    @GetMapping("/assigned/{userId}")
+    public ResponseEntity<List<ComplaintDTO>> getAssignedTo(@PathVariable Integer userId) {
+        List<ComplaintDTO> complaints = complaintService.getComplaintsAssignedTo(userId);
+        return ResponseEntity.ok(complaints);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ComplaintDTO> updateComplaint(@PathVariable Integer id, @Valid @RequestBody ComplaintDTO complaintDTO) {
+        ComplaintDTO updatedComplaint = complaintService.updateComplaint(id, complaintDTO);
+        return ResponseEntity.ok(updatedComplaint);
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<ComplaintDTO> updateStatus(@PathVariable Integer id, @RequestParam Status status) {
+        ComplaintDTO updatedComplaint = complaintService.updateComplaintStatus(id, status);
+        return ResponseEntity.ok(updatedComplaint);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteComplaint(@PathVariable Integer id) {
         complaintService.deleteComplaint(id);
-        return ResponseEntity.ok("Deleted successfully");
+        return ResponseEntity.ok("Complaint deleted successfully");
     }
 }
-

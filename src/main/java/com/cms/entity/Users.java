@@ -1,5 +1,6 @@
 package com.cms.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -40,6 +41,7 @@ public class Users {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "createdBy")
+    @JsonIgnore
     private List<Complaints> complaintsCreated;
 
     @OneToMany(mappedBy = "assignedTo")
