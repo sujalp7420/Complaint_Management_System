@@ -2,13 +2,10 @@ package com.cms.dto;
 
 import com.cms.entity.Role;
 import com.cms.entity.StatusUser;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
+import java.time.LocalDateTime;
 
 public class UserDTO {
-
     private Integer id;
 
     @NotBlank(message = "Name is required")
@@ -19,17 +16,19 @@ public class UserDTO {
     @Email(message = "Invalid email format")
     private String email;
 
-    @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
 
-    @Size(max = 15, message = "Phone number must not exceed 15 characters")
+    @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be 10 digits")
     private String phone;
 
     @NotNull(message = "Role is required")
     private Role role;
 
-    private StatusUser statusUser = StatusUser.ACTIVE;
+    private StatusUser statusUser;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     // Constructors
     public UserDTO() {}
@@ -64,4 +63,10 @@ public class UserDTO {
 
     public StatusUser getStatusUser() { return statusUser; }
     public void setStatusUser(StatusUser statusUser) { this.statusUser = statusUser; }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

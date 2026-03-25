@@ -8,9 +8,10 @@ import com.cms.exception.ResourceNotFoundException;
 import com.cms.exception.DuplicateResourceException;
 import com.cms.repository.UserRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDateTime;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,10 +21,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ModelMapper mapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, ModelMapper mapper) {
+    public UserServiceImpl(UserRepository userRepository,
+                           ModelMapper mapper,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.mapper = mapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -35,42 +40,57 @@ public class UserServiceImpl implements UserService {
         Users user = new Users();
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword()); // In production, encode this!
+
+        // Encrypt password before saving
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+
         user.setPhone(userDTO.getPhone());
-        user.setRole(userDTO.getRole());
-        user.setStatusUser(userDTO.getStatusUser());
-        user.setCreatedAt(LocalDateTime.now());
-        user.setUpdatedAt(LocalDateTime.now());
+        user.setRole(userDTO.getRole() != null ? userDTO.getRole() : Role.USER);
+        user.setStatusUser(userDTO.getStatusUser() != null ? userDTO.getStatusUser() : StatusUser.ACTIVE);
 
         Users savedUser = userRepository.save(user);
-        return mapper.map(savedUser, UserDTO.class);
+        UserDTO response = mapper.map(savedUser, UserDTO.class);
+        response.setPassword(null); // Don't return password
+        return response;
     }
 
     @Override
     public UserDTO getUserById(Integer id) {
         Users user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
-        return mapper.map(user, UserDTO.class);
+        UserDTO response = mapper.map(user, UserDTO.class);
+        response.setPassword(null);
+        return response;
     }
 
     @Override
     public UserDTO getUserByEmail(String email) {
         Users user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
-        return mapper.map(user, UserDTO.class);
+        UserDTO response = mapper.map(user, UserDTO.class);
+        response.setPassword(null);
+        return response;
     }
 
     @Override
     public List<UserDTO> getAllUsers() {
         return userRepository.findAll().stream()
-                .map(user -> mapper.map(user, UserDTO.class))
+                .map(user -> {
+                    UserDTO dto = mapper.map(user, UserDTO.class);
+                    dto.setPassword(null);
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<UserDTO> getUsersByRole(Role role) {
         return userRepository.findByRole(role).stream()
-                .map(user -> mapper.map(user, UserDTO.class))
+                .map(user -> {
+                    UserDTO dto = mapper.map(user, UserDTO.class);
+                    dto.setPassword(null);
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -87,12 +107,19 @@ public class UserServiceImpl implements UserService {
 
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
+
+        // Only update password if provided
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        }
+
         user.setPhone(userDTO.getPhone());
         user.setRole(userDTO.getRole());
-        user.setUpdatedAt(LocalDateTime.now());
 
         Users updatedUser = userRepository.save(user);
-        return mapper.map(updatedUser, UserDTO.class);
+        UserDTO response = mapper.map(updatedUser, UserDTO.class);
+        response.setPassword(null);
+        return response;
     }
 
     @Override
@@ -101,10 +128,11 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
 
         user.setStatusUser(status);
-        user.setUpdatedAt(LocalDateTime.now());
 
         Users updatedUser = userRepository.save(user);
-        return mapper.map(updatedUser, UserDTO.class);
+        UserDTO response = mapper.map(updatedUser, UserDTO.class);
+        response.setPassword(null);
+        return response;
     }
 
     @Override

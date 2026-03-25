@@ -2,12 +2,11 @@ package com.cms.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "users")   // Change table name if different
+@Table(name = "users")
 public class Users {
 
     @Id
@@ -17,21 +16,21 @@ public class Users {
     @Column(name = "name", nullable = false, length = 100)
     private String name;
 
-    @Column(name = "email", nullable = false, length = 100, unique = true)
+    @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(name = "password", nullable = false, length = 255)
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "phone", length = 15)
+    @Column(name = "phone", length = 20)
     private String phone;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    private Role role;
+    private Role role = Role.USER;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @Column(name = "status_user")
     private StatusUser statusUser = StatusUser.ACTIVE;
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -45,86 +44,65 @@ public class Users {
     private List<Complaints> complaintsCreated;
 
     @OneToMany(mappedBy = "assignedTo")
+    @JsonIgnore
     private List<Complaints> complaintsAssigned;
 
-    @OneToMany(mappedBy = "changedBy")
-    private List<ComplaintStatusHistory> statusChanges;
-
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<ComplaintComment> comments;
 
-    @OneToMany(mappedBy = "uploadedBy")
-    private List<ComplaintAttachment> attachments;
+    @OneToMany(mappedBy = "changedBy")
+    @JsonIgnore
+    private List<ComplaintStatusHistory> statusHistories;
 
-    public Integer getId() {
-        return id;
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
-    public String getName() {
-        return name;
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 
-    public String getEmail() {
-        return email;
-    }
+    // Getters and Setters
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getPhone() {
-        return phone;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public Role getRole() {
-        return role;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public StatusUser getStatusUser() {
-        return statusUser;
-    }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
+    public Role getRole() { return role; }
+    public void setRole(Role role) { this.role = role; }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
+    public StatusUser getStatusUser() { return statusUser; }
+    public void setStatusUser(StatusUser statusUser) { this.statusUser = statusUser; }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public List<Complaints> getComplaintsCreated() { return complaintsCreated; }
+    public void setComplaintsCreated(List<Complaints> complaintsCreated) { this.complaintsCreated = complaintsCreated; }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    public List<Complaints> getComplaintsAssigned() { return complaintsAssigned; }
+    public void setComplaintsAssigned(List<Complaints> complaintsAssigned) { this.complaintsAssigned = complaintsAssigned; }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+    public List<ComplaintComment> getComments() { return comments; }
+    public void setComments(List<ComplaintComment> comments) { this.comments = comments; }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public void setStatusUser(StatusUser statusUser) {
-        this.statusUser = statusUser;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+    public List<ComplaintStatusHistory> getStatusHistories() { return statusHistories; }
+    public void setStatusHistories(List<ComplaintStatusHistory> statusHistories) { this.statusHistories = statusHistories; }
 }
