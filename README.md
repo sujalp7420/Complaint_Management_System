@@ -23,18 +23,6 @@ It allows users to:
 
 ---
 
-## 📂 Project Structure
-com.cms
-│
-├── config # Security & configuration
-├── controller # REST APIs
-├── dto # Data Transfer Objects
-├── entity # JPA Entities
-├── exception # Custom exceptions
-├── repository # Database layer
-├── service # Business logic
----
-
 ## 🔐 Security
 
 - Uses **Spring Security with JDBC Authentication**
