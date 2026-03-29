@@ -36,4 +36,3 @@ public class ComplaintCommentServiceImpl implements ComplaintCommentService {
         return commentRepository.findByComplaint_Id(complaintId);
     }
 }
-

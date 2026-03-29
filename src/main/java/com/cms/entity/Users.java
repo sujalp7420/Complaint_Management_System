@@ -51,10 +51,6 @@ public class Users {
     @JsonIgnore
     private List<ComplaintComment> comments;
 
-    @OneToMany(mappedBy = "changedBy")
-    @JsonIgnore
-    private List<ComplaintStatusHistory> statusHistories;
-
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
@@ -103,6 +99,4 @@ public class Users {
     public List<ComplaintComment> getComments() { return comments; }
     public void setComments(List<ComplaintComment> comments) { this.comments = comments; }
 
-    public List<ComplaintStatusHistory> getStatusHistories() { return statusHistories; }
-    public void setStatusHistories(List<ComplaintStatusHistory> statusHistories) { this.statusHistories = statusHistories; }
 }

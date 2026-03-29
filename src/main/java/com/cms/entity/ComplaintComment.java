@@ -1,6 +1,10 @@
 package com.cms.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
 
@@ -14,20 +18,23 @@ public class ComplaintComment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "complaint_id")
+    @JsonIgnore
     private Complaints complaint;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = true)
+    @JsonIgnore
     private Users user;
 
     @Column(nullable = false, columnDefinition = "TEXT")
+    @NotBlank(message = "Message is required")
     private String message;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @PrePersist
-    public void setCreatedAt() {
+    protected void onCreate() {
         this.createdAt = LocalDateTime.now();
     }
 
@@ -55,10 +62,12 @@ public class ComplaintComment {
         return id;
     }
 
+    @JsonIgnore
     public Complaints getComplaint() {
         return complaint;
     }
 
+    @JsonIgnore
     public Users getUser() {
         return user;
     }

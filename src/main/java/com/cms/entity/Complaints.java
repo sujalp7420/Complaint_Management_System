@@ -1,5 +1,6 @@
 package com.cms.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -37,25 +38,26 @@ public class Complaints {
     private LocalDateTime resolvedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "category_id")
     private Category category;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "created_by")
     private Users createdBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "assigned_to")
     private Users assignedTo;
 
     @OneToMany(mappedBy = "complaint", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<ComplaintComment> comments;
 
-
     @OneToMany(mappedBy = "complaint", cascade = CascadeType.ALL)
-    private List<ComplaintStatusHistory> statusHistory;
-
-    @OneToMany(mappedBy = "complaint", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<ComplaintAttachment> attachments;
 
     @PrePersist
@@ -121,10 +123,6 @@ public class Complaints {
         this.comments = comments;
     }
 
-    public void setStatusHistory(List<ComplaintStatusHistory> statusHistory) {
-        this.statusHistory = statusHistory;
-    }
-
     public void setAttachments(List<ComplaintAttachment> attachments) {
         this.attachments = attachments;
     }
@@ -179,10 +177,6 @@ public class Complaints {
 
     public List<ComplaintComment> getComments() {
         return comments;
-    }
-
-    public List<ComplaintStatusHistory> getStatusHistory() {
-        return statusHistory;
     }
 
     public List<ComplaintAttachment> getAttachments() {

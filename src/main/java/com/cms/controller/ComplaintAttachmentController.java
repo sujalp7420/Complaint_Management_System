@@ -2,6 +2,7 @@ package com.cms.controller;
 
 import com.cms.entity.ComplaintAttachment;
 import com.cms.service.ComplaintAttachmentService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class ComplaintAttachmentController {
     @PostMapping("/{complaintId}")
     public ResponseEntity<ComplaintAttachment> addAttachment(
             @PathVariable Integer complaintId,
-            @RequestBody ComplaintAttachment attachment) {
+            @Valid @RequestBody ComplaintAttachment attachment) {
 
         return ResponseEntity.ok(attachmentService.addAttachment(complaintId, attachment));
     }

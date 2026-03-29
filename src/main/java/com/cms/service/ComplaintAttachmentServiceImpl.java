@@ -36,4 +36,3 @@ public class ComplaintAttachmentServiceImpl implements ComplaintAttachmentServic
         return attachmentRepository.findByComplaint_Id(complaintId);
     }
 }
-

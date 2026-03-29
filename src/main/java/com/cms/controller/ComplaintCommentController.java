@@ -2,6 +2,7 @@ package com.cms.controller;
 
 import com.cms.entity.ComplaintComment;
 import com.cms.service.ComplaintCommentService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class ComplaintCommentController {
     @PostMapping("/{complaintId}")
     public ResponseEntity<ComplaintComment> addComment(
             @PathVariable Integer complaintId,
-            @RequestBody ComplaintComment comment) {
+            @Valid @RequestBody ComplaintComment comment) {
 
         return ResponseEntity.ok(commentService.addComment(complaintId, comment));
     }

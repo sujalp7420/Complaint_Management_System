@@ -25,7 +25,7 @@ public class ComplaintDTO {
     @NotNull(message = "Category ID is required")
     private Integer categoryId;
 
-    @NotNull(message = "Created by user ID is required")
+    /** Ignored on create: server sets this from the authenticated user. */
     private Integer createdById;
 
     private Integer assignedToId;
