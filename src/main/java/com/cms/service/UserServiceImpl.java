@@ -123,27 +123,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO updateUserStatus(Integer id, StatusUser status) {
-        Users user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
-
-        user.setStatusUser(status);
-
-        Users updatedUser = userRepository.save(user);
-        UserDTO response = mapper.map(updatedUser, UserDTO.class);
-        response.setPassword(null);
-        return response;
-    }
-
-    @Override
-    public void deleteUser(Integer id) {
-        if (!userRepository.existsById(id)) {
-            throw new ResourceNotFoundException("User not found with id: " + id);
-        }
-        userRepository.deleteById(id);
-    }
-
-    @Override
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
     }

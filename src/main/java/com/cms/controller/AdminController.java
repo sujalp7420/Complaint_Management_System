@@ -28,12 +28,6 @@ public class AdminController {
         return userService.getAllUsers();
     }
 
-    @DeleteMapping("/users/{id}")
-    public String deleteUser(@PathVariable Integer id) {
-        userService.deleteUser(id);
-        return "User deleted successfully";
-    }
-
     // ================= COMPLAINTS =================
 
     @GetMapping("/complaints")

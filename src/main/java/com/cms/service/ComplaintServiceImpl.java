@@ -196,10 +196,6 @@ public class ComplaintServiceImpl implements ComplaintService {
 
         complaint.setStatus(status);
 
-        if (status == Status.RESOLVED) {
-            complaint.setResolvedAt(LocalDateTime.now());
-        }
-
         complaint.setUpdatedAt(LocalDateTime.now());
 
         Complaints updatedComplaint = complaintRepository.save(complaint);

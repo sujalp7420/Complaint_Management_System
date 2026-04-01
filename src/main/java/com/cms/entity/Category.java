@@ -1,6 +1,5 @@
 package com.cms.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -29,7 +28,6 @@ public class Category {
     }
 
     @OneToMany(mappedBy = "category")
-    @JsonIgnore
     private List<Complaints> complaints;
 
     // Getters & Setters

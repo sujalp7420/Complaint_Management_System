@@ -1,8 +1,6 @@
 package com.cms.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,29 +33,22 @@ public class Complaints {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    private LocalDateTime resolvedAt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "created_by")
     private Users createdBy;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "assigned_to")
     private Users assignedTo;
 
     @OneToMany(mappedBy = "complaint", cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<ComplaintComment> comments;
 
     @OneToMany(mappedBy = "complaint", cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<ComplaintAttachment> attachments;
 
     @PrePersist
@@ -101,10 +92,6 @@ public class Complaints {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public void setResolvedAt(LocalDateTime resolvedAt) {
-        this.resolvedAt = resolvedAt;
     }
 
     public void setCategory(Category category) {
@@ -157,10 +144,6 @@ public class Complaints {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
-    }
-
-    public LocalDateTime getResolvedAt() {
-        return resolvedAt;
     }
 
     public Category getCategory() {

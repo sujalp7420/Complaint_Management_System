@@ -55,16 +55,4 @@ public class UserController {
         UserDTO updatedUser = userService.updateUser(id, userDTO);
         return ResponseEntity.ok(updatedUser);
     }
-
-    @PatchMapping("/{id}/status")
-    public ResponseEntity<UserDTO> updateUserStatus(@PathVariable Integer id, @RequestParam StatusUser status) {
-        UserDTO updatedUser = userService.updateUserStatus(id, status);
-        return ResponseEntity.ok(updatedUser);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable Integer id) {
-        userService.deleteUser(id);
-        return ResponseEntity.ok("User deleted successfully");
-    }
 }

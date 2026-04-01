@@ -1,8 +1,5 @@
 package com.cms.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
@@ -16,14 +13,12 @@ public class ComplaintComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "complaint_id")
-    @JsonIgnore
     private Complaints complaint;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = true)
-    @JsonIgnore
     private Users user;
 
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -62,12 +57,10 @@ public class ComplaintComment {
         return id;
     }
 
-    @JsonIgnore
     public Complaints getComplaint() {
         return complaint;
     }
 
-    @JsonIgnore
     public Users getUser() {
         return user;
     }

@@ -19,9 +19,5 @@ public interface UserService {
 
     UserDTO updateUser(Integer id, UserDTO userDTO);
 
-    UserDTO updateUserStatus(Integer id, StatusUser status);
-
-    void deleteUser(Integer id);
-
     boolean existsByEmail(String email);
 }

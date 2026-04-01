@@ -1,8 +1,5 @@
 package com.cms.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
@@ -16,9 +13,8 @@ public class ComplaintAttachment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "complaint_id")
-    @JsonIgnore
     private Complaints complaint;
 
     @Column(length = 255)
@@ -28,9 +24,8 @@ public class ComplaintAttachment {
     @Column(length = 255)
     private String filePath;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "uploaded_by", nullable = true)
-    @JsonIgnore
     private Users uploadedBy;
 
     @Transient
