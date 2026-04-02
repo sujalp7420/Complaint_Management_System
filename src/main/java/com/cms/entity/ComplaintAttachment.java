@@ -75,7 +75,6 @@ public class ComplaintAttachment {
         return id;
     }
 
-    @JsonIgnore
     public Complaints getComplaint() {
         return complaint;
     }
@@ -88,7 +87,6 @@ public class ComplaintAttachment {
         return filePath;
     }
 
-    @JsonIgnore
     public Users getUploadedBy() {
         return uploadedBy;
     }
